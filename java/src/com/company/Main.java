@@ -32,9 +32,16 @@ public class Main {
             Date yesterday = cal.getTime();
             JSONArray files = getNewFilesSince(token, yesterday);
             // Download each file one by one
-            for (int i = 0; i < files.length(); i++) {
+            int len = files.length();
+            for (int i = 0; i < len; i++) {
+                System.out.println("Download file " + (i+1) + "/" + len);
                 JSONObject file = files.getJSONObject(i);
-                downloadFile(Constants.apiUrl, token, file.getString("id"));
+                try {
+                    downloadFile(Constants.apiUrl, token, file.getString("id"));
+                } catch(Exception e) {
+                    System.out.println("Something went wrong");
+                    // Maybe retry
+                }
             }
 
         } catch (Exception e) {
